@@ -9,9 +9,14 @@
 <body>
     <button class="language-switcher" onclick="toggleLanguage()">عربي</button>
     <div class="container">
+        <div class="image-container" style="text-align: center; margin-bottom: 1rem;">
+            <img src="https://cdn.salla.sa/cdn-cgi/image/fit=scale-down,width=400,height=400,onerror=redirect,format=auto/pegYz/dpZz4xk5WGuVsazFaYehZkIfJYBMhKavslXwTpie.png" 
+                 alt="Shipment Illustration" 
+                 style="max-width: 100%; height: auto; border-radius: 8px;">
+        </div>
         <div class="search-container">
             <h1 class="lang-title">Track Your Shipment</h1>
-            <p style="margin: 1rem 0; color: #9ca3af;" class="lang-subtitle">Enter your tracking number to get real-time updates</p>
+            <p style="margin: 1rem 0; color: #ffffff;" class="lang-subtitle">Enter your tracking number to get real-time updates</p>
             <div class="search-box">
                 <input type="text" placeholder="Enter tracking number..." class="lang-placeholder" id="tracking-input">
                 <button class="lang-button" onclick="trackPackage()">Track Package</button>
@@ -20,15 +25,13 @@
 
         <div class="loader" id="loader">
             <div class="loader-spinner"></div>
-            <p style="margin-top: 1rem; color: #9ca3af;" class="lang-loading">Tracking your package...</p>
+            <p style="margin-top: 1rem; color: #3b51a3;" class="lang-loading">Tracking your package...</p>
         </div>
 
         <div class="tracking-result" id="tracking-result">    
-            <div class="delivery-info">
-                <a href="#" target="_blank" id="track-link">
-                    <button class="lang-button2">Click here to track your shipment</button>
-                </a>
-            </div>
+            <a href="#" target="_blank" id="track-link">
+                <button class="lang-button2">Click here to track your shipment</button>
+            </a>
         </div>
     </div>
 

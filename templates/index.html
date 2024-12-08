@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href=".">
+    <title>Shipment Tracker</title>
+    <link rel="icon" type="image/png" href="https://i.imgur.com/95XFJvL.png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <button class="language-switcher" onclick="toggleLanguage()">عربي</button>
+    <div class="container">
+        <div class="search-container">
+            <h1 class="lang-title">Track Your Shipment</h1>
+            <p style="margin: 1rem 0; color: #9ca3af;" class="lang-subtitle">Enter your tracking number to get real-time updates</p>
+            <div class="search-box">
+                <input type="text" placeholder="Enter tracking number..." class="lang-placeholder" id="tracking-input">
+                <button class="lang-button" onclick="trackPackage()">Track Package</button>
+            </div>
+        </div>
+
+        <div class="loader" id="loader">
+            <div class="loader-spinner"></div>
+            <p style="margin-top: 1rem; color: #9ca3af;" class="lang-loading">Tracking your package...</p>
+        </div>
+
+        <div class="tracking-result" id="tracking-result">    
+            <div class="delivery-info">
+                <a href="#" target="_blank" id="track-link">
+                    <button class="lang-button2">Click here to track your shipment</button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    const translations = {
+      en: {
+        title: "Track Your Shipment",
+        subtitle: "Enter your tracking number to get real-time updates",
+        placeholder: "Enter tracking number...",
+        button: "Track Package",
+        loading: "Tracking your package...",
+        status: "Shipment Status",
+        tracking: "Tracking Number:",
+        estimatedDelivery: "ESTIMATED DELIVERY",
+        currentLocation: "CURRENT LOCATION", 
+        shippingMethod: "SHIPPING METHOD",
+        orderPlaced: "Order Placed",
+        processing: "Processing",
+        inTransit: "In Transit",
+        delivered: "Delivered",
+        switchLang: "عربي",
+        notFound: "Tracking number not found.",
+        invalid: "Please enter a valid tracking number.",
+        clickHere: "Click here to track your shipment"
+      },
+      ar: {
+        title: "تتبع شحنتك",
+        subtitle: "أدخل رقم التتبع للحصول على التحديثات",
+        placeholder: "أدخل رقم التتبع...",
+        button: "تتبع الطرد",
+        loading: "جاري تتبع الطرد...",
+        status: "حالة الشحنة",
+        tracking: "رقم التتبع:",
+        estimatedDelivery: "موعد التسليم المتوقع",
+        currentLocation: "الموقع الحالي",
+        shippingMethod: "طريقة الشحن",
+        orderPlaced: "تم تقديم الطلب",
+        processing: "قيد المعالجة",
+        inTransit: "في الطريق",
+        delivered: "تم التوصيل",
+        switchLang: "English",
+        notFound: "لم يتم العثور على رقم التتبع.",
+        invalid: "يرجى إدخال رقم تتبع صالح.",
+        clickHere: "إضغط هنا للتبع شحنتك"
+      }
+    };
+
+    let currentLang = 'en';
+
+    function toggleLanguage() {
+      currentLang = currentLang === 'en' ? 'ar' : 'en';
+      const dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+      document.documentElement.setAttribute('dir', dir);
+      
+      document.querySelector('.language-switcher').textContent = translations[currentLang].switchLang;
+      document.querySelector('.lang-title').textContent = translations[currentLang].title;
+      document.querySelector('.lang-subtitle').textContent = translations[currentLang].subtitle;
+      document.querySelector('.lang-placeholder').placeholder = translations[currentLang].placeholder;
+      document.querySelector('.lang-subtitle').textContent = translations[currentLang].subtitle;
+      document.querySelector('.lang-button2').textContent = translations[currentLang].clickHere;
+      document.querySelectorAll('.lang-button').forEach(button => {
+          button.textContent = translations[currentLang].button;
+      });
+      document.querySelector('.lang-loading').textContent = translations[currentLang].loading;
+    }
+
+    async function trackPackage() {
+        const trackingInput = document.getElementById('tracking-input').value.trim();
+        if (!trackingInput || !/^\d+$/.test(trackingInput)) {
+            alert(translations[currentLang].invalid);
+            return;
+        }
+
+        // Show loader and hide result
+        document.getElementById('loader').style.display = 'block';
+        document.getElementById('tracking-result').style.display = 'none';
+
+        try {
+            const response = await fetch('/track', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ tracking_number: trackingInput }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Update the track link
+                document.getElementById('track-link').href = data.track_url;
+                // Show result
+                document.getElementById('tracking-result').style.display = 'block';
+            } else {
+                // Show error message
+                alert(data.error || (currentLang === 'en' ? 'An error occurred.' : 'حدث خطأ ما.'));
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert(currentLang === 'en' ? 'An error occurred.' : 'حدث خطأ ما.');
+        } finally {
+            // Hide loader
+            document.getElementById('loader').style.display = 'none';
+        }
+    }
+    </script>
+</body>
+</html>

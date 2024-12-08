@@ -124,7 +124,7 @@
                 // Update the track link
                 document.getElementById('track-link').href = data.track_url;
                 // Show result
-                document.getElementById('tracking-result').style.display = 'block';
+                document.getElementById('tracking-result').style.display = 'flex';
             } else {
                 // Show error message
                 alert(data.error || (currentLang === 'en' ? 'An error occurred.' : 'حدث خطأ ما.'));

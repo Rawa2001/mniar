@@ -72,6 +72,10 @@ def find_tracking_number(df, tracking_number):
 def index():
     return render_template('index.html')
 
+@app.route('/index')
+def index():
+    return render_template('index.html')
+
 @app.route('/track', methods=['POST'])
 def track():
     data = request.get_json()
